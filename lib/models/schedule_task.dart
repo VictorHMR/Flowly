@@ -1,30 +1,59 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class ScheduleTask extends Equatable {
-  final int? id;
-  final String title;
-  final TaskType type;
+class ScheduleTask {
+  int? id;
+  String title;
+  TaskType type;
+  IconData icon;
 
-  final String? note;
-  final List<WeekDay>? weekDays;
-  final int? dayOfMonth;
-  final DateTime? singleDate;
+  String? note;
+  List<WeekDay>? weekDays;
+  int? dayOfMonth;
+  DateTime? singleDate;
 
-  const ScheduleTask({
+  ScheduleTask({
     this.id,
     required this.title,
     required this.type,
-
+    required this.icon,
     this.note,
     this.weekDays,
     this.dayOfMonth,
     this.singleDate,
   });
 
-  @override
-  List<Object?> get props {
-    return [id!, title, note, weekDays, dayOfMonth, singleDate];
+  ScheduleTask copyWith({
+    int? id,
+    String? title,
+    TaskType? type,
+    IconData? icon,
+    String? note,
+    List<WeekDay>? weekDays,
+    int? dayOfMonth,
+    DateTime? singleDate,
+  }) {
+    return ScheduleTask(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      icon: icon ?? this.icon,
+      note: note ?? this.note,
+      weekDays: weekDays ?? this.weekDays,
+      dayOfMonth: dayOfMonth ?? this.dayOfMonth,
+      singleDate: singleDate ?? this.singleDate,
+    );
   }
+}
+
+enum FieldType {
+  text,
+  multilineText,
+  enumSelection,
+  weekDaysSelection,
+  date,
+  day,
+  number,
+  none,
 }
 
 enum TaskType {
@@ -36,18 +65,56 @@ enum TaskType {
   final String label;
 
   const TaskType(this.label);
+
+  FieldType get fieldType {
+    switch (this) {
+      case TaskType.daily:
+        return FieldType.none;
+
+      case TaskType.weekly:
+        return FieldType.weekDaysSelection;
+
+      case TaskType.monthly:
+        return FieldType.day;
+      case TaskType.single:
+        return FieldType.date;
+    }
+  }
 }
 
 enum WeekDay {
-  monday('Seg'),
-  tuesday('Ter'),
-  wednesday('Qua'),
-  thursday('Qui'),
-  friday('Sex'),
-  saturday('Sab'),
-  sunday('Dom');
+  sunday('Domingo', 'Dom', 'D'),
+  monday('Segunda', 'Seg', 'S'),
+  tuesday('Terça', 'Ter', 'T'),
+  wednesday('Quarta', 'Qua', 'Q'),
+  thursday('Quinta', 'Qui', 'Q'),
+  friday('Sexta', 'Sex', 'S'),
+  saturday('Sábado', 'Sáb', 'S');
 
   final String label;
+  final String shortLabel;
+  final String tinyLabel;
 
-  const WeekDay(this.label);
+  const WeekDay(this.label, this.shortLabel, this.tinyLabel);
+
+  static WeekDay fromDateTimeWeekday(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return WeekDay.monday;
+      case DateTime.tuesday:
+        return WeekDay.tuesday;
+      case DateTime.wednesday:
+        return WeekDay.wednesday;
+      case DateTime.thursday:
+        return WeekDay.thursday;
+      case DateTime.friday:
+        return WeekDay.friday;
+      case DateTime.saturday:
+        return WeekDay.saturday;
+      case DateTime.sunday:
+        return WeekDay.sunday;
+      default:
+        throw Exception('Dia inválido');
+    }
+  }
 }

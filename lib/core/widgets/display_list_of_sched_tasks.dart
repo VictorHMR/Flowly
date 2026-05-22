@@ -1,27 +1,49 @@
 import 'package:flowly/models/schedule_task.dart';
+import 'package:flowly/views/schedule_task_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
-class DisplayListOfSchedTasks extends StatelessWidget {
-  const DisplayListOfSchedTasks({super.key, required this.scheduleTasks});
+import 'widgets.dart';
 
-  final List<ScheduleTask> scheduleTasks;
+class DisplayListOfSchedTasks extends StatefulWidget {
+  const DisplayListOfSchedTasks({super.key, required this.scheduledTasks});
 
+  final List<ScheduleTask> scheduledTasks;
+
+  @override
+  State<DisplayListOfSchedTasks> createState() =>
+      _DisplayListOfSchedTasksState();
+}
+
+class _DisplayListOfSchedTasksState extends State<DisplayListOfSchedTasks> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: scheduleTasks.length,
+      itemCount: widget.scheduledTasks.length,
       itemBuilder: (ctx, index) {
-        final scheduledTask = scheduleTasks[index];
+        var scheduledTask = widget.scheduledTasks[index];
         return InkWell(
           onLongPress: () {
             //Delete Task
           },
-          onTap: () {
-            //ShowDetails
+          onTap: () async {
+            final updatedTask = await Navigator.push<ScheduleTask>(
+              ctx,
+              MaterialPageRoute(
+                builder: (ctx) =>
+                    ScheduleTaskDetails(scheduleTask: scheduledTask),
+              ),
+            );
+            if (updatedTask != null) {
+              setState(() {
+                scheduledTask = updatedTask;
+                widget.scheduledTasks[index] = updatedTask;
+              });
+            }
           },
           child: Container(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -40,7 +62,14 @@ class DisplayListOfSchedTasks extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: colors.primary,
                       ),
-                      child: Center(child: Icon(Icons.circle)),
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Icon(
+                          scheduledTask.icon,
+                          size: 30,
+                          color: colors.surfaceBright,
+                        ),
+                      ),
                     ),
                     Gap(20),
                     Column(
@@ -62,7 +91,18 @@ class DisplayListOfSchedTasks extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text('Seg, Ter, Qua'),
+                if (scheduledTask.type == TaskType.daily)
+                  Text('Todo Dia')
+                else if (scheduledTask.type == TaskType.single)
+                  Text(
+                    DateFormat('dd/MM/yyyy').format(scheduledTask.singleDate!),
+                  )
+                else if (scheduledTask.type == TaskType.monthly)
+                  Text('Dia ${scheduledTask.dayOfMonth}')
+                else if (scheduledTask.type == TaskType.weekly)
+                  DisplayTinyWeekDays(activeWeekDays: scheduledTask.weekDays)
+                else
+                  Text(''),
               ],
             ),
           ),
