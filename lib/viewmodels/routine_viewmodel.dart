@@ -24,8 +24,10 @@ class RoutineViewModel extends ChangeNotifier {
     await loadScheduledTasks();
   }
 
-  Future<void> deleteTask(int id) async {
-    await repository.delete(id);
+  Future<void> deleteTasks(List<ScheduleTask> tasks) async {
+    for (final task in tasks) {
+      await repository.delete(task.id!);
+    }
     await loadScheduledTasks();
   }
 }
