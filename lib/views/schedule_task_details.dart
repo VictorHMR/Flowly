@@ -1,10 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flowly/models/models.dart';
+import 'package:flowly/viewmodels/viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
 import 'package:flowly/core/widgets/widgets.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleTaskDetails extends StatefulWidget {
   const ScheduleTaskDetails({super.key, this.scheduleTask});
@@ -40,8 +40,12 @@ class _ScheduleTaskDetailsState extends State<ScheduleTaskDetails> {
         title: Text('${scheduleTask.id == null ? 'Nova' : ''} Tarefa'),
         actions: [
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, scheduleTask);
+            onPressed: () async {
+              await context.read<RoutineViewModel>().saveTask(scheduleTask);
+
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
             },
 
             child: Text(scheduleTask.id == null ? 'Criar' : 'Salvar'),

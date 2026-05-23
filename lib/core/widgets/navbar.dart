@@ -17,7 +17,6 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
-    final screenSize = context.screenSize;
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[currentPageIndex]),

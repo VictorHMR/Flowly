@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class ScheduleTask {
   int? id;
+
   String title;
+
   TaskType type;
+
   IconData icon;
 
   String? note;
+
   List<WeekDay>? weekDays;
+
   int? dayOfMonth;
+
   DateTime? singleDate;
 
   ScheduleTask({
@@ -41,6 +48,40 @@ class ScheduleTask {
       weekDays: weekDays ?? this.weekDays,
       dayOfMonth: dayOfMonth ?? this.dayOfMonth,
       singleDate: singleDate ?? this.singleDate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'type': type.name,
+      'icon': icon.codePoint,
+      'note': note,
+      'week_days': weekDays == null
+          ? null
+          : jsonEncode(weekDays!.map((e) => e.name).toList()),
+      'day_of_month': dayOfMonth,
+      'single_date': singleDate?.millisecondsSinceEpoch,
+    };
+  }
+
+  factory ScheduleTask.fromMap(Map<String, dynamic> map) {
+    return ScheduleTask(
+      id: map['id'],
+      title: map['title'],
+      type: TaskType.values.firstWhere((e) => e.name == map['type']),
+      icon: IconData(map['icon'], fontFamily: 'MaterialIcons'),
+      note: map['note'],
+      weekDays: map['week_days'] == null
+          ? null
+          : (jsonDecode(map['week_days']) as List)
+                .map((e) => WeekDay.values.firstWhere((day) => day.name == e))
+                .toList(),
+      dayOfMonth: map['day_of_month'],
+      singleDate: map['single_date'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(map['single_date']),
     );
   }
 }

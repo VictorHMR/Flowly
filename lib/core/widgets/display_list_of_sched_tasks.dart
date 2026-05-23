@@ -7,43 +7,30 @@ import 'package:intl/intl.dart';
 
 import 'widgets.dart';
 
-class DisplayListOfSchedTasks extends StatefulWidget {
+class DisplayListOfSchedTasks extends StatelessWidget {
   const DisplayListOfSchedTasks({super.key, required this.scheduledTasks});
 
   final List<ScheduleTask> scheduledTasks;
-
-  @override
-  State<DisplayListOfSchedTasks> createState() =>
-      _DisplayListOfSchedTasksState();
-}
-
-class _DisplayListOfSchedTasksState extends State<DisplayListOfSchedTasks> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: widget.scheduledTasks.length,
+      itemCount: scheduledTasks.length,
       itemBuilder: (ctx, index) {
-        var scheduledTask = widget.scheduledTasks[index];
+        var scheduledTask = scheduledTasks[index];
         return InkWell(
           onLongPress: () {
             //Delete Task
           },
           onTap: () async {
-            final updatedTask = await Navigator.push<ScheduleTask>(
+            await Navigator.push<ScheduleTask>(
               ctx,
               MaterialPageRoute(
                 builder: (ctx) =>
                     ScheduleTaskDetails(scheduleTask: scheduledTask),
               ),
             );
-            if (updatedTask != null) {
-              setState(() {
-                scheduledTask = updatedTask;
-                widget.scheduledTasks[index] = updatedTask;
-              });
-            }
           },
           child: Container(
             padding: EdgeInsets.only(left: 20, right: 20),
