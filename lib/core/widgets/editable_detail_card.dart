@@ -54,24 +54,19 @@ class EditableDetailCard<T> extends StatelessWidget {
               Container(
                 width: 46,
                 height: 46,
-
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colors.inversePrimary,
                 ),
-
                 child: Icon(icon, color: colors.primary),
               ),
-
               const SizedBox(width: 16),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -82,7 +77,7 @@ class EditableDetailCard<T> extends StatelessWidget {
                         type == FieldType.text)
                       Text(
                         getLabel?.call(value) ?? value.toString(),
-
+                        maxLines: 5,
                         style: TextStyle(
                           fontSize: 14,
                           color: colors.onSurfaceVariant,
@@ -197,8 +192,9 @@ class EditableDetailCard<T> extends StatelessWidget {
 
               TextField(
                 controller: controller,
-                maxLines: type == FieldType.multilineText ? 6 : 1,
+                maxLines: type == FieldType.multilineText ? 5 : 1,
                 minLines: type == FieldType.multilineText ? 4 : 1,
+                maxLength: type == FieldType.multilineText ? 190 : 50,
                 autofocus: true,
 
                 decoration: InputDecoration(

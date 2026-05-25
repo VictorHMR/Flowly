@@ -27,6 +27,11 @@ class ScheduleTaskRepository {
 
   Future<int> delete(int id) async {
     final db = await AppDatabase.database;
+    await db.delete(
+      'task_occurrence',
+      where: 'scheduleTaskId = ?',
+      whereArgs: [id],
+    );
     return db.delete('schedule_tasks', where: 'id = ?', whereArgs: [id]);
   }
 }

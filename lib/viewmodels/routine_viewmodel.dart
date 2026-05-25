@@ -1,5 +1,6 @@
 import 'package:flowly/models/models.dart';
 import 'package:flowly/repositories/schedule_task_repository.dart';
+import 'package:flowly/services/services.dart';
 import 'package:flutter/material.dart';
 
 class RoutineViewModel extends ChangeNotifier {
@@ -21,6 +22,7 @@ class RoutineViewModel extends ChangeNotifier {
     } else {
       await repository.update(task);
     }
+    await ScheduleGenerationService.generateTodayTasks();
     await loadScheduledTasks();
   }
 

@@ -66,10 +66,13 @@ class _NavbarState extends State<Navbar> {
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
+        onDestinationSelected: (int index) async {
           setState(() {
             currentPageIndex = index;
           });
+          if (index == 1) {
+            await context.read<HomeViewModel>().loadTaskOccurrences();
+          }
         },
         indicatorColor: colors.primary,
         selectedIndex: currentPageIndex,

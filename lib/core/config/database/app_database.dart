@@ -21,9 +21,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-
       version: 1,
-
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE schedule_tasks(
@@ -35,6 +33,18 @@ class AppDatabase {
             week_days TEXT,
             day_of_month INTEGER,
             single_date INTEGER
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE task_occurrence(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date INTEGER NOT NULL,
+            scheduleTaskId INTEGER NOT NULL,
+            isComplete INTERGER NOT NULL,
+
+            FOREIGN KEY (scheduleTaskId) REFERENCES schedule_task(id),
+            UNIQUE(scheduleTaskId, date)
           )
         ''');
       },
