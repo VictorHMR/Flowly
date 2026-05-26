@@ -3,7 +3,7 @@ import 'package:flowly/repositories/schedule_task_repository.dart';
 import 'package:flowly/services/services.dart';
 import 'package:flutter/material.dart';
 
-class RoutineViewModel extends ChangeNotifier {
+class ScheduleTaskViewModel extends ChangeNotifier {
   final repository = ScheduleTaskRepository();
 
   List<ScheduleTask> scheduleTasks = [];

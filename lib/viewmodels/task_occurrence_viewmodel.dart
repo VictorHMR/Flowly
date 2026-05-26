@@ -2,10 +2,22 @@ import 'package:flowly/models/models.dart';
 import 'package:flowly/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class TaskOccurrenceViewModel extends ChangeNotifier {
   final repository = TaskOccurrenceRepository();
 
   List<TaskOccurrence> taskOccurrences = [];
+  List<TaskOccurrence> get completedTasks =>
+      taskOccurrences.where((e) => e.isComplete).toList();
+
+  List<TaskOccurrence> get pendingTasks =>
+      taskOccurrences.where((e) => !e.isComplete).toList();
+
+  double get progressPercent {
+    if (taskOccurrences.isEmpty) return 0;
+
+    return completedTasks.length / taskOccurrences.length;
+  }
+
   bool isLoading = false;
   Future<void> loadTaskOccurrences() async {
     final today = DateTime(

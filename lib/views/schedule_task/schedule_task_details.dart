@@ -41,7 +41,9 @@ class _ScheduleTaskDetailsState extends State<ScheduleTaskDetails> {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await context.read<RoutineViewModel>().saveTask(scheduleTask);
+              await context.read<ScheduleTaskViewModel>().saveTask(
+                scheduleTask,
+              );
 
               if (context.mounted) {
                 Navigator.pop(context);

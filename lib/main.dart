@@ -15,8 +15,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => RoutineViewModel()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => ScheduleTaskViewModel()),
+        ChangeNotifierProvider(create: (_) => TaskOccurrenceViewModel()),
         ChangeNotifierProvider(
           create: (_) => SelectionController<ScheduleTask>(),
         ),

@@ -1,5 +1,6 @@
 import 'package:flowly/core/config/database/app_database.dart';
 import 'package:flowly/models/models.dart';
+import 'package:flowly/repositories/repositories.dart';
 
 class TaskOccurrenceRepository {
   Future<bool> existsForDate(int scheduleTaskId, DateTime date) async {
@@ -26,7 +27,17 @@ class TaskOccurrenceRepository {
       whereArgs: [date.millisecondsSinceEpoch],
       orderBy: 'scheduleTaskId DESC',
     );
-    return result.map((e) => TaskOccurrence.fromMap(e)).toList();
+    final taskOccurrences = result
+        .map((e) => TaskOccurrence.fromMap(e))
+        .toList();
+
+    final scheduleTaskRepository = ScheduleTaskRepository();
+    for (final occurrence in taskOccurrences) {
+      occurrence.scheduleTask = await scheduleTaskRepository.getById(
+        occurrence.scheduleTaskId,
+      );
+    }
+    return taskOccurrences;
   }
 
   Future<int> completeTask(TaskOccurrence task) async {

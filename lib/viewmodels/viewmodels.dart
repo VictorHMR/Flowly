@@ -1,2 +1,2 @@
-export 'routine_viewmodel.dart';
-export 'home_viewmodel.dart';
+export 'schedule_task_viewmodel.dart';
+export 'task_occurrence_viewmodel.dart';

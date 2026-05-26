@@ -1,10 +1,11 @@
 import 'package:flowly/core/utils/utils.dart';
-import 'package:flowly/core/widgets/widgets.dart';
 import 'package:flowly/models/models.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
-import 'package:flowly/views/schedule_task_details.dart';
+import 'package:flowly/views/schedule_task/schedule_task_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'widgets/display_list_of_sched_tasks.dart';
 
 class RoutineScreen extends StatefulWidget {
   const RoutineScreen({super.key});
@@ -19,7 +20,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
     super.initState();
 
     Future.microtask(() {
-      context.read<RoutineViewModel>().loadScheduledTasks();
+      context.read<ScheduleTaskViewModel>().loadScheduledTasks();
     });
   }
 
@@ -27,7 +28,6 @@ class _RoutineScreenState extends State<RoutineScreen> {
   Widget build(BuildContext context) {
     final screenSize = context.screenSize;
     final colors = Theme.of(context).colorScheme;
-    final viewModel = context.watch<RoutineViewModel>();
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
@@ -35,9 +35,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
           alignment: AlignmentGeometry.topCenter,
           child: SizedBox(
             width: screenSize.width * 0.9,
-            child: DisplayListOfSchedTasks(
-              scheduledTasks: viewModel.scheduleTasks,
-            ),
+            child: DisplayListOfSchedTasks(),
           ),
         ),
       ),
