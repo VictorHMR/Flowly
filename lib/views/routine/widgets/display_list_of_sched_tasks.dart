@@ -1,28 +1,28 @@
 import 'package:flowly/core/controllers/controllers.dart';
+import 'package:flowly/core/widgets/widgets.dart';
 import 'package:flowly/models/schedule_task.dart';
-import 'package:flowly/views/schedule_task_details.dart';
+import 'package:flowly/viewmodels/viewmodels.dart';
+import 'package:flowly/views/schedule_task/schedule_task_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets.dart';
-
 class DisplayListOfSchedTasks extends StatelessWidget {
-  const DisplayListOfSchedTasks({super.key, required this.scheduledTasks});
-
-  final List<ScheduleTask> scheduledTasks;
+  const DisplayListOfSchedTasks({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
     final selection = context.watch<SelectionController<ScheduleTask>>();
+    final viewModel = context.watch<ScheduleTaskViewModel>();
+
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: scheduledTasks.length,
+      itemCount: viewModel.scheduleTasks.length,
       itemBuilder: (ctx, index) {
-        final scheduledTask = scheduledTasks[index];
+        final scheduledTask = viewModel.scheduleTasks[index];
         final isSelected = selection.isSelected(scheduledTask);
         return InkWell(
           onLongPress: () {
@@ -75,22 +75,27 @@ class DisplayListOfSchedTasks extends StatelessWidget {
                       ),
                     ),
                     const Gap(20),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          scheduledTask.title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    SizedBox(
+                      width: 140,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            scheduledTask.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          scheduledTask.note ?? '',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ],
+                          Text(
+                            scheduledTask.note ?? '',
+                            style: const TextStyle(fontSize: 12),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

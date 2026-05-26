@@ -3,8 +3,8 @@ import 'package:flowly/models/schedule_task.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
-import 'package:flowly/views/home_screen.dart';
-import 'package:flowly/views/routine_screen.dart';
+import 'package:flowly/views/home/home_screen.dart';
+import 'package:flowly/views/routine/routine_screen.dart';
 import 'package:provider/provider.dart';
 
 class Navbar extends StatefulWidget {
@@ -43,7 +43,7 @@ class _NavbarState extends State<Navbar> {
           if (isRoutinePage && selection.isSelectionMode)
             IconButton(
               onPressed: () async {
-                await context.read<RoutineViewModel>().deleteTasks(
+                await context.read<ScheduleTaskViewModel>().deleteTasks(
                   selection.selectedItems,
                 );
                 selection.clear();
@@ -66,10 +66,13 @@ class _NavbarState extends State<Navbar> {
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
+        onDestinationSelected: (int index) async {
           setState(() {
             currentPageIndex = index;
           });
+          if (index == 1) {
+            await context.read<TaskOccurrenceViewModel>().loadTaskOccurrences();
+          }
         },
         indicatorColor: colors.primary,
         selectedIndex: currentPageIndex,

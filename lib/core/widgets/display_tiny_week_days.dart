@@ -21,7 +21,7 @@ class DisplayTinyWeekDays extends StatelessWidget {
                   height: 4,
                   decoration: BoxDecoration(
                     color: selectedDays.contains(day)
-                        ? colors.primary
+                        ? colors.primaryContainer
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(999),
                   ),
@@ -32,7 +32,7 @@ class DisplayTinyWeekDays extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: selectedDays.contains(day)
-                        ? colors.primary
+                        ? colors.primaryContainer
                         : colors.onSurfaceVariant,
                   ),
                 ),

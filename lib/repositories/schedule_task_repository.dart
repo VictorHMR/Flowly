@@ -14,6 +14,18 @@ class ScheduleTaskRepository {
     return result.map((e) => ScheduleTask.fromMap(e)).toList();
   }
 
+  Future<ScheduleTask> getById(int id) async {
+    final db = await AppDatabase.database;
+    final result = await db.query(
+      'schedule_tasks',
+      where: 'id = ?',
+      whereArgs: [id],
+      orderBy: 'id DESC',
+      limit: 1,
+    );
+    return ScheduleTask.fromMap(result.first);
+  }
+
   Future<int> update(ScheduleTask task) async {
     final db = await AppDatabase.database;
 
@@ -27,6 +39,11 @@ class ScheduleTaskRepository {
 
   Future<int> delete(int id) async {
     final db = await AppDatabase.database;
+    await db.delete(
+      'task_occurrence',
+      where: 'scheduleTaskId = ?',
+      whereArgs: [id],
+    );
     return db.delete('schedule_tasks', where: 'id = ?', whereArgs: [id]);
   }
 }

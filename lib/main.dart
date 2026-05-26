@@ -1,4 +1,5 @@
 import 'package:flowly/core/controllers/controllers.dart';
+import 'package:flowly/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/config/config.dart';
 import 'package:flowly/core/widgets/widgets.dart';
@@ -6,12 +7,16 @@ import 'package:flowly/models/models.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await AppStartupService.initialize();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => RoutineViewModel()),
-
+        ChangeNotifierProvider(create: (_) => ScheduleTaskViewModel()),
+        ChangeNotifierProvider(create: (_) => TaskOccurrenceViewModel()),
         ChangeNotifierProvider(
           create: (_) => SelectionController<ScheduleTask>(),
         ),
