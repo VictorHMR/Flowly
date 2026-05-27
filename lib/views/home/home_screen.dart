@@ -25,8 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<TaskOccurrenceViewModel>();
-
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),

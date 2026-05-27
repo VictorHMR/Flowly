@@ -45,7 +45,7 @@ class TaskOccorrenceTile extends StatelessWidget {
                 ),
                 const Gap(20),
                 SizedBox(
-                  width: 140,
+                  width: 240,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
