@@ -1,3 +1,4 @@
+import 'package:flowly/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
 
@@ -105,94 +106,48 @@ class EditableIconCard<T> extends StatelessWidget {
       backgroundColor: colors.surface,
 
       builder: (_) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-          ),
-
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 42,
-                  height: 5,
+        return AppBottomSheet(
+          title: 'Selecionar Ícone',
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: avaliableIcons.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+            ),
+            itemBuilder: (context, index) {
+              final icon = avaliableIcons[index];
+              final isSelected = icon == selectedIcon;
+              return GestureDetector(
+                onTap: () {
+                  onChanged(icon);
+                  Navigator.pop(context);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
                   decoration: BoxDecoration(
-                    color: colors.outlineVariant,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(20),
+                    color: isSelected
+                        ? colors.primary
+                        : colors.surfaceContainerHighest,
+                    border: Border.all(
+                      color: isSelected
+                          ? colors.primary
+                          : colors.outlineVariant,
+                    ),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 30,
+                    color: isSelected
+                        ? colors.onPrimary
+                        : colors.onSurfaceVariant,
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 24),
-
-              Text(
-                'Selecionar Ícone',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: colors.onSurface,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: avaliableIcons.length,
-
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                ),
-
-                itemBuilder: (context, index) {
-                  final icon = avaliableIcons[index];
-                  final isSelected = icon == selectedIcon;
-
-                  return GestureDetector(
-                    onTap: () {
-                      onChanged(icon);
-                      Navigator.pop(context);
-                    },
-
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-
-                        color: isSelected
-                            ? colors.primary
-                            : colors.surfaceContainerHighest,
-
-                        border: Border.all(
-                          color: isSelected
-                              ? colors.primary
-                              : colors.outlineVariant,
-                        ),
-                      ),
-
-                      child: Icon(
-                        icon,
-                        size: 30,
-                        color: isSelected
-                            ? colors.onPrimary
-                            : colors.onSurfaceVariant,
-                      ),
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 20),
-            ],
+              );
+            },
           ),
         );
       },
