@@ -17,6 +17,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleTaskViewModel()),
         ChangeNotifierProvider(create: (_) => TaskOccurrenceViewModel()),
+        ChangeNotifierProvider(create: (_) => SettingsViewModel()),
         ChangeNotifierProvider(
           create: (_) => SelectionController<ScheduleTask>(),
         ),
@@ -31,9 +32,13 @@ class FlowlyApp extends StatelessWidget {
   const FlowlyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    final configVM = context.watch<SettingsViewModel>();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
+      theme: AppTheme.light(configVM.currentScheme),
+      darkTheme: AppTheme.dark(configVM.currentScheme),
+      themeMode: ThemeMode.dark,
       home: Navbar(),
     );
   }
