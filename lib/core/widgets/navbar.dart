@@ -1,6 +1,7 @@
 import 'package:flowly/core/controllers/controllers.dart';
 import 'package:flowly/models/schedule_task.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
+import 'package:flowly/views/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
 import 'package:flowly/views/home/home_screen.dart';
@@ -57,7 +58,12 @@ class _NavbarState extends State<Navbar> {
                 radius: 28,
                 backgroundColor: Colors.transparent,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ConfigsScreen()),
+                    );
+                  },
                   icon: const Icon(Icons.settings_outlined),
                   iconSize: 28,
                 ),

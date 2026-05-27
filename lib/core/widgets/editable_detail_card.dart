@@ -143,18 +143,20 @@ class EditableDetailCard<T> extends StatelessWidget {
       context: context,
       backgroundColor: colors.surface,
       builder: (_) {
-        return ListView(
-          children: enumValues!.map((item) {
-            return ListTile(
-              title: Text(getLabel?.call(item) ?? item.toString()),
-
-              onTap: () {
-                Navigator.pop(context);
-
-                onChanged(item);
-              },
-            );
-          }).toList(),
+        return AppBottomSheet(
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: enumValues!.map((item) {
+              return ListTile(
+                title: Text(getLabel?.call(item) ?? item.toString()),
+                onTap: () {
+                  Navigator.pop(context);
+                  onChanged(item);
+                },
+              );
+            }).toList(),
+          ),
         );
       },
     );
@@ -169,58 +171,44 @@ class EditableDetailCard<T> extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: colors.surface,
       builder: (_) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-          ),
-
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: controller,
-                maxLines: type == FieldType.multilineText ? 5 : 1,
-                minLines: type == FieldType.multilineText ? 4 : 1,
-                maxLength: type == FieldType.multilineText ? 190 : 50,
-                autofocus: true,
-
-                decoration: InputDecoration(
-                  hintText: 'Digite aqui...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
+        return AppBottomSheet(
+          title: title,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: controller,
+                  maxLines: type == FieldType.multilineText ? 5 : 1,
+                  minLines: type == FieldType.multilineText ? 4 : 1,
+                  maxLength: type == FieldType.multilineText ? 190 : 50,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'Digite aqui...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity,
-
-                child: FilledButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-
-                    onChanged(controller.text as T);
-                  },
-
-                  child: const Text('Salvar'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      onChanged(controller.text as T);
+                    },
+                    child: const Text('Salvar'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -237,94 +225,80 @@ class EditableDetailCard<T> extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: colors.surface,
       builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-              ),
-
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Dias Da Semana',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...WeekDay.values.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final day = entry.value;
-                        final isSelected = selectedDays.contains(day);
-                        return GestureDetector(
-                          onTap: () {
-                            setModalState(() {
-                              if (isSelected) {
-                                selectedDays.remove(day);
-                              } else {
-                                selectedDays.add(day);
-                              }
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: 42,
-                            height: 42,
-
-                            alignment: Alignment.center,
-
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-
-                              color: isSelected
-                                  ? colors.primary
-                                  : colors.surfaceContainer,
-                            ),
-
-                            child: Text(
-                              day.tinyLabel,
-
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: index == 0
-                                    ? colors.error
-                                    : isSelected
-                                    ? colors.onPrimary
-                                    : colors.onSurfaceVariant,
+        return AppBottomSheet(
+          title: 'Dias Da Semana',
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ...WeekDay.values.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final day = entry.value;
+                          final isSelected = selectedDays.contains(day);
+                          return GestureDetector(
+                            onTap: () {
+                              setModalState(() {
+                                if (isSelected) {
+                                  selectedDays.remove(day);
+                                } else {
+                                  selectedDays.add(day);
+                                }
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: 42,
+                              height: 42,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isSelected
+                                    ? colors.primary
+                                    : colors.surfaceContainer,
+                              ),
+                              child: Text(
+                                day.tinyLabel,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: index == 0
+                                      ? colors.error
+                                      : isSelected
+                                      ? colors.onPrimary
+                                      : colors.onSurfaceVariant,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  SizedBox(
-                    width: double.infinity,
-
-                    child: FilledButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-
-                        onChanged(selectedDays as T);
-                      },
-
-                      child: const Text('Salvar'),
+                          );
+                        }),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          onChanged(selectedDays as T);
+                        },
+                        child: const Text('Salvar'),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
     );

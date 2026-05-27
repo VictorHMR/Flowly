@@ -25,37 +25,41 @@ class AppTheme {
     popupMenuOpacity: 0.95,
   );
 
-  static final light = FlexThemeData.light(
-    scheme: _scheme,
-    surfaceMode: FlexSurfaceMode.highScaffoldLowSurfacesVariantDialog,
-    blendLevel: 40,
-    appBarStyle: FlexAppBarStyle.primary,
-    appBarOpacity: 0.95,
-    appBarElevation: 0,
-    transparentStatusBar: true,
-    tabBarStyle: FlexTabBarStyle.forBackground,
-    tooltipsMatchBackground: true,
-    swapColors: true,
-    lightIsWhite: true,
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    fontFamily: GoogleFonts.aBeeZee().fontFamily,
-    subThemesData: _subThemes,
-  );
+  static ThemeData light(FlexScheme scheme) {
+    return FlexThemeData.light(
+      scheme: scheme,
+      surfaceMode: FlexSurfaceMode.highScaffoldLowSurfacesVariantDialog,
+      blendLevel: 40,
+      appBarStyle: FlexAppBarStyle.primary,
+      appBarOpacity: 0.95,
+      appBarElevation: 0,
+      transparentStatusBar: true,
+      tabBarStyle: FlexTabBarStyle.forBackground,
+      tooltipsMatchBackground: true,
+      swapColors: true,
+      lightIsWhite: true,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      fontFamily: GoogleFonts.aBeeZee().fontFamily,
+      subThemesData: _subThemes,
+    );
+  }
 
-  static final dark = FlexThemeData.dark(
-    scheme: FlexScheme.sakura,
-    surfaceMode: FlexSurfaceMode.highScaffoldLowSurfacesVariantDialog,
-    blendLevel: 40,
-    appBarStyle: FlexAppBarStyle.primary,
-    appBarOpacity: 0.95,
-    appBarElevation: 0,
-    transparentStatusBar: true,
-    tabBarStyle: FlexTabBarStyle.forBackground,
-    tooltipsMatchBackground: true,
-    swapColors: false,
-    darkIsTrueBlack: false,
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    fontFamily: GoogleFonts.aBeeZee().fontFamily,
-    subThemesData: _subThemes,
-  );
+  static ThemeData dark(FlexScheme scheme) {
+    return FlexThemeData.dark(
+      scheme: scheme,
+      surfaceMode: FlexSurfaceMode.highScaffoldLowSurfacesVariantDialog,
+      blendLevel: 40,
+      appBarStyle: FlexAppBarStyle.primary,
+      appBarOpacity: 0.95,
+      appBarElevation: 0,
+      transparentStatusBar: true,
+      tabBarStyle: FlexTabBarStyle.forBackground,
+      tooltipsMatchBackground: true,
+      swapColors: false,
+      darkIsTrueBlack: false,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      fontFamily: GoogleFonts.aBeeZee().fontFamily,
+      subThemesData: _subThemes,
+    );
+  }
 }
