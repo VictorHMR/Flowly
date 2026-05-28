@@ -3,20 +3,14 @@ import 'dart:convert';
 
 class ScheduleTask {
   int? id;
-
   String title;
-
   TaskType type;
-
   IconData icon;
-
   String? note;
-
   List<WeekDay>? weekDays;
-
   int? dayOfMonth;
-
   DateTime? singleDate;
+  bool? isActive;
 
   ScheduleTask({
     this.id,
@@ -27,6 +21,7 @@ class ScheduleTask {
     this.weekDays,
     this.dayOfMonth,
     this.singleDate,
+    this.isActive,
   });
 
   ScheduleTask copyWith({
@@ -48,6 +43,7 @@ class ScheduleTask {
       weekDays: weekDays ?? this.weekDays,
       dayOfMonth: dayOfMonth ?? this.dayOfMonth,
       singleDate: singleDate ?? this.singleDate,
+      isActive: isActive ?? true,
     );
   }
 
@@ -63,6 +59,7 @@ class ScheduleTask {
           : jsonEncode(weekDays!.map((e) => e.name).toList()),
       'day_of_month': dayOfMonth,
       'single_date': singleDate?.millisecondsSinceEpoch,
+      'is_active': (isActive ?? true) ? 1 : 0,
     };
   }
 
@@ -82,6 +79,7 @@ class ScheduleTask {
       singleDate: map['single_date'] == null
           ? null
           : DateTime.fromMillisecondsSinceEpoch(map['single_date']),
+      isActive: map['is_active'] == 1,
     );
   }
 }

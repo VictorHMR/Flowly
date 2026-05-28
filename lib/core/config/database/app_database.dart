@@ -32,7 +32,8 @@ class AppDatabase {
             note TEXT,
             week_days TEXT,
             day_of_month INTEGER,
-            single_date INTEGER
+            single_date INTEGER,
+            is_active INTERGER NOT NULL
           )
         ''');
 
