@@ -1,6 +1,8 @@
 import 'package:flowly/core/controllers/controllers.dart';
+import 'package:flowly/models/note.dart';
 import 'package:flowly/models/schedule_task.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
+import 'package:flowly/views/notes/notes_screen.dart';
 import 'package:flowly/views/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flowly/core/utils/utils.dart';
@@ -18,36 +20,60 @@ class Navbar extends StatefulWidget {
 class _NavbarState extends State<Navbar> {
   int currentPageIndex = 1;
   final titles = ['Cronograma', 'Hoje', 'Notas'];
-
-  @override
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
-    final selection = context.watch<SelectionController<ScheduleTask>>();
+
+    final schedTaskSelection = context
+        .watch<SelectionController<ScheduleTask>>();
+    final notesSelection = context.watch<SelectionController<Note>>();
+
     final isRoutinePage = currentPageIndex == 0;
+    final isNotesPage = currentPageIndex == 2;
+
+    final isNotesSelection = isNotesPage && notesSelection.isSelectionMode;
+    final isRoutineSelection =
+        isRoutinePage && schedTaskSelection.isSelectionMode;
+
     return Scaffold(
       appBar: AppBar(
-        leading: isRoutinePage && selection.isSelectionMode
+        leading: (isRoutineSelection || isNotesSelection)
             ? IconButton(
                 onPressed: () {
-                  selection.clear();
+                  if (isRoutineSelection) {
+                    schedTaskSelection.clear();
+                  } else {
+                    notesSelection.clear();
+                  }
                 },
                 icon: const Icon(Icons.close),
               )
             : null,
         title: Text(
-          isRoutinePage && selection.isSelectionMode
-              ? '${selection.selectedItems.length} selecionados'
+          (isRoutineSelection || isNotesSelection)
+              ? '${isRoutineSelection ? schedTaskSelection.selectedItems.length : notesSelection.selectedItems.length} selecionados'
               : titles[currentPageIndex],
         ),
         actions: [
-          if (isRoutinePage && selection.isSelectionMode)
+          if (isRoutineSelection)
             IconButton(
               onPressed: () async {
                 await context.read<ScheduleTaskViewModel>().deleteTasks(
-                  selection.selectedItems,
+                  schedTaskSelection.selectedItems,
                 );
-                selection.clear();
+
+                schedTaskSelection.clear();
+              },
+              icon: const Icon(Icons.delete),
+            )
+          else if (isNotesSelection)
+            IconButton(
+              onPressed: () async {
+                await context.read<NoteViewModel>().deleteNotes(
+                  notesSelection.selectedItems,
+                );
+
+                notesSelection.clear();
               },
               icon: const Icon(Icons.delete),
             )
@@ -82,26 +108,22 @@ class _NavbarState extends State<Navbar> {
         },
         indicatorColor: colors.primary,
         selectedIndex: currentPageIndex,
-        destinations: <Widget>[
+        destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.calendar_view_week_outlined),
-            label: titles[0],
+            label: 'Cronograma',
           ),
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
-            label: titles[1],
+            label: 'Hoje',
           ),
           NavigationDestination(icon: Icon(Icons.notes), label: 'Notas'),
         ],
       ),
       body: IndexedStack(
         index: currentPageIndex,
-        children: <Widget>[
-          RoutineScreen(),
-          HomeScreen(),
-          Center(child: Text(titles[2])),
-        ],
+        children: const <Widget>[RoutineScreen(), HomeScreen(), NotesScreen()],
       ),
     );
   }

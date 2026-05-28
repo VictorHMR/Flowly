@@ -48,6 +48,21 @@ class AppDatabase {
             UNIQUE(scheduleTaskId, date)
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE notes(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            uuid TEXT NOT NULL,
+            firebase_id TEXT,
+            title TEXT NOT NULL DEFAULT '',
+            document TEXT NOT NULL DEFAULT '',
+            preview TEXT NOT NULL DEFAULT '',
+            pending_sync INTEGER NOT NULL DEFAULT 1,
+            pinned_at INTEGER,
+            created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL
+          )
+        ''');
       },
     );
   }

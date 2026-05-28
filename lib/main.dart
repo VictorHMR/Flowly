@@ -6,6 +6,7 @@ import 'package:flowly/core/widgets/widgets.dart';
 import 'package:flowly/models/models.dart';
 import 'package:flowly/viewmodels/viewmodels.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +19,11 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ScheduleTaskViewModel()),
         ChangeNotifierProvider(create: (_) => TaskOccurrenceViewModel()),
         ChangeNotifierProvider(create: (_) => SettingsViewModel()),
+        ChangeNotifierProvider(create: (_) => NoteViewModel()),
         ChangeNotifierProvider(
           create: (_) => SelectionController<ScheduleTask>(),
         ),
+        ChangeNotifierProvider(create: (_) => SelectionController<Note>()),
       ],
 
       child: const FlowlyApp(),
@@ -36,6 +39,7 @@ class FlowlyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [FlutterQuillLocalizations.delegate],
       theme: AppTheme.light(configVM.currentScheme),
       darkTheme: AppTheme.dark(configVM.currentScheme),
       themeMode: ThemeMode.dark,
